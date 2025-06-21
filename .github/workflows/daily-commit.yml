@@ -5,7 +5,7 @@ name: Daily Commit Workflow
 on:
   schedule:
     - cron: '15 3 * * *'  # Runs daily at 03:15 UTC
-  workflow_dispatch:       # Allows manual trigger (for testing)
+  workflow_dispatch:
 
 jobs:
   daily-commit:
@@ -14,6 +14,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Make daily commit by 23f3001929@ds.study.iitm.ac.in
         run: |
@@ -21,5 +23,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add daily-log.txt
-          git commit -m "Daily commit $(date)"
+          git commit -m "Daily commit $(date)" || echo "No changes to commit"
           git push
